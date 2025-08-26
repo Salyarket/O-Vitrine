@@ -1,0 +1,65 @@
+# Nom du workflow qui sera affiché sur Github
+name: Run integration tests on API
+
+# Je définis les évènements qui déclenchent le workflow
+on:
+  push: # Un push ou un merge va déclencher le workflow
+    branches:
+      - main
+      - master
+  pull_request: # La création d'une PR vers main va déclencher le workflow
+    branches:
+      - main
+      - master
+
+# Suites d'étapes qui s'éxécutent dans un runner
+jobs:
+  run_api_tests: # Nom du job
+    runs-on: ubuntu-latest
+
+    # Services nécessaires pour les tests
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ovitrine_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    # Variables d'environnement disponibles dans tout mon job
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ovitrine_test
+
+    steps:
+      # 1. Récupérer le code du dépôt
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Installer Node.js
+      - name: Install Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # 3. Installer les dépendances
+      - name: Install dependencies
+        run: npm install -w api
+
+      # 4. Générer Prisma Client
+      - name: Generate Prisma Client
+        run: npm run db:generate -w api
+
+      # 5. Build de l’API (nouvel ajout)
+      - name: Build API
+        run: npm run build -w api
+
+      # 6. Lancer les tests
+      - name: Run tests
+        run: npm run test:spec -w api
