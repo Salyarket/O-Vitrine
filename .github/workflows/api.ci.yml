@@ -65,4 +65,4 @@ jobs:
 
       # 6. Lancer les tests
       - name: Run tests
-        run: npm run test:spec 
+        run: npm run test
