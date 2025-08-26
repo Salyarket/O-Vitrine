@@ -11,7 +11,7 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "ts-node prisma/seed.ts",
     "docker:start": "prisma migrate deploy && node dist/index.js",
-    "test": "node --test --require tsx --env-file=.env.test"
+    "test": "tsx --test"
   },
   "dependencies": {
     "@prisma/client": "^6.14.0",
