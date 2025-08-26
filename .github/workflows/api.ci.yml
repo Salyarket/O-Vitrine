@@ -16,6 +16,9 @@ on:
 jobs:
   run_api_tests: # Nom du job
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api
 
     # Services nécessaires pour les tests
     services:
@@ -50,16 +53,16 @@ jobs:
 
       # 3. Installer les dépendances
       - name: Install dependencies
-        run: npm install -w api
+        run: npm install
 
       # 4. Générer Prisma Client
       - name: Generate Prisma Client
-        run: npm run db:generate -w api
+        run: npm run db:generate 
 
       # 5. Build de l’API (nouvel ajout)
       - name: Build API
-        run: npm run build -w api
+        run: npm run build 
 
       # 6. Lancer les tests
       - name: Run tests
-        run: npm run test:spec -w api
+        run: npm run test:spec 
