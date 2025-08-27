@@ -10,4 +10,9 @@ router.get("/", async (_req, res) => {
   res.json(projects);
 });
 
+//smoke test
+router.get("/ping", (_req, res) => {
+  res.json({ message: "pong" });
+});
+
 export default router;

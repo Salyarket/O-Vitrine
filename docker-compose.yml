@@ -5,7 +5,7 @@ services:
     env_file:
       - .env.docker
     ports:
-      - "${POSTGRES_LOCAL_PORT}:5432"
+      - "5433:5432"
     networks:
       - ovitrine-network
     volumes:
